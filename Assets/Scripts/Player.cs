@@ -7,14 +7,22 @@ public class Player : MonoBehaviour
 {
     private bool isGrounded;
     public float jumpForce = 5f;
-    private Rigidbody rb;
+    [SerializeField] private Collider2D col;
+    [SerializeField] private Transform _playerTransform;
+    [SerializeField] private Rigidbody2D rb;
+    [SerializeField] private GameObject coinPrefab;
+    [SerializeField] private PlayerUI playerUI;
+    private int _points = 0;
     
     
     // Start is called before the first frame update
     void Start()
     {
+        playerUI.UpdatePoint(_points);
         isGrounded = true;
-        rb = GetComponent<Rigidbody>();
+        rb = GetComponent<Rigidbody2D>();
+        col = GetComponent<Collider2D>();
+
     }
 
     // Update is called once per frame
@@ -30,7 +38,7 @@ public class Player : MonoBehaviour
     {
         // Add your jump logic here, e.g., applying a force to the Rigidbody
         isGrounded = false;
-        rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
+        rb.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
     }
     
     private void OnCollisionEnter2D(Collision2D collision)
@@ -40,4 +48,21 @@ public class Player : MonoBehaviour
             isGrounded = true;
         }
     }
+
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if (!other.CompareTag("Coin"))
+        {
+            return;
+        }
+
+        _points++;
+        if (playerUI != null)
+        {
+            playerUI.UpdatePoint(_points);
+        }
+
+        Destroy(other.gameObject);
+    }
+
 }
