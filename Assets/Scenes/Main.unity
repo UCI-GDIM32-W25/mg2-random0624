@@ -1060,7 +1060,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   coinPrefab: {fileID: 2145149798}
   _coinTransform: {fileID: 2145149800}
-  moveSpeed: 2
+  moveSpeed: 2.2
+  minSpawnDelay: 1
+  maxSpawnDelay: 3
+  isSpawner: 1
 --- !u!50 &2145149802
 Rigidbody2D:
   serializedVersion: 4
@@ -1141,11 +1144,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8387066866425820820, guid: 2d73897065770421f8da6d4536eb1aaa, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 6.23
+      value: 15
       objectReference: {fileID: 0}
     - target: {fileID: 8387066866425820820, guid: 2d73897065770421f8da6d4536eb1aaa, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 12.72
+      value: 12.7
       objectReference: {fileID: 0}
     - target: {fileID: 8387066866425820820, guid: 2d73897065770421f8da6d4536eb1aaa, type: 3}
       propertyPath: m_LocalPosition.z

@@ -1,20 +1,42 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Coin : MonoBehaviour
 {
     [SerializeField] private GameObject coinPrefab;
     [SerializeField] private Transform _coinTransform;
-    [SerializeField] private float moveSpeed = 2f;
+    [SerializeField] private float moveSpeed = 2.5f;
+    [SerializeField] private float minSpawnDelay = 0.5f;
+    [SerializeField] private float maxSpawnDelay = 3f;
+    [SerializeField] private bool isSpawner = true;
 
-    private static GameObject _activeCoin;
+    private Coroutine _spawnRoutine;
 
     private void Start()
     {
-        if (_activeCoin == null)
+        if (!isSpawner)
         {
-            _activeCoin = SpawnCoin();
+            return;
+        }
+
+        /*if (minSpawnDelay > maxSpawnDelay)
+        {
+            float temp = minSpawnDelay;
+            minSpawnDelay = maxSpawnDelay;
+            maxSpawnDelay = temp;
+        }*/
+
+        _spawnRoutine = StartCoroutine(SpawnLoop());
+    }
+
+    private IEnumerator SpawnLoop()
+    {
+        while (true)
+        {
+            SpawnCoin();
+            float delay = Random.Range(minSpawnDelay, maxSpawnDelay);
+            yield return new WaitForSeconds(delay);
+            
         }
     }
 
@@ -27,6 +49,26 @@ public class Coin : MonoBehaviour
             coinRb.velocity = Vector2.left * moveSpeed;
         }
 
+        Coin coinComponent = coin.GetComponent<Coin>();
+        if (coinComponent != null)
+        {
+            coinComponent.DisableSpawning();
+        }
+
         return coin;
+    }
+
+    private void OnDisable()
+    {
+        if (_spawnRoutine != null)
+        {
+            StopCoroutine(_spawnRoutine);
+            _spawnRoutine = null;
+        }
+    }
+
+    public void DisableSpawning()
+    {
+        isSpawner = false;
     }
 }
